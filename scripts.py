@@ -26,11 +26,14 @@ def create_commendation(child, subject):
                              'Это как раз то, что нужно!', 'Я тобой горжусь!',
                              'С каждым разом у тебя получается всё лучше!']
         random_text = random.choice(text_commendation)
-        lesson = Lesson.objects.filter(
+        lessons = Lesson.objects.filter(
                      year_of_study=child.year_of_study,
                      group_letter=child.group_letter,
                      subject__title=subject
-        ).order_by('-date').first()
+        )
+        if not lessons:
+            return print('Такого предмета не существует. Повторите ввод.')
+        lesson = lessons.order_by('-date').first()
         Commendation.objects.create(
             schoolkid=child,
             created=lesson.date,
